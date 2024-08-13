@@ -32,7 +32,7 @@ def make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj):
 
     #Making the dataset
     data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj, device='cuda').make_data()
-    saved_data = data.save_to_disk("/home/moonlab/decision_transformer/decision_tr/data/")
+    data.save_to_disk("/home/moonlab/decision_transformer/data/")
 
     feature = data['train']
     state_dim = len(feature['states'][0][0])
@@ -151,7 +151,7 @@ def experiment(variant):
     trainer = SequenceTrainer(
             model=model,
             optimizer=optimizer,
-            batch_size=32,
+            batch_size=batch_size,
             get_batch=collate_data,
             scheduler=scheduler,
             loss_fn=lambda s_hat, a_hat, r_hat, s, a, r: torch.mean((a_hat - a)**2),

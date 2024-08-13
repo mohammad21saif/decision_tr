@@ -19,7 +19,7 @@ class DataCollate:
         - None
         '''
 
-        self.dataset = load_from_disk('/home/moonlab/decision_transformer/decision_tr/data/')
+        self.dataset = load_from_disk('/home/moonlab/decision_transformer/data/')
         self.batch_size = batch_size
         self.max_len = max_len
         self.max_episode_len = max_episode_len
