@@ -148,6 +148,7 @@ def experiment(variant):
             }
         return fn
 
+
     trainer = SequenceTrainer(
             model=model,
             optimizer=optimizer,
@@ -157,6 +158,8 @@ def experiment(variant):
             loss_fn=lambda s_hat, a_hat, r_hat, s, a, r: torch.mean((a_hat - a)**2),
             eval_fns=[eval_episodes(tar) for tar in env_targets],
         )
+    
+
     checkpoint_dir = '/home/moonlab/decision_transformer/decision_tr/saved_models'
     for iter in range(max_iters):
         outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
@@ -164,9 +167,9 @@ def experiment(variant):
         save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
     
     final_model_path = os.path.join(checkpoint_dir, "trained_model.pt")
-    torch.save(model.state_dict(), final_model_path)
+    torch.save(model, final_model_path)
 
-    MakeAnime()
+    MakeAnime(max_ep_len, num_robot, env_targets, grid_size, max_ep_len).anime()
 
 
     
@@ -189,7 +192,7 @@ if __name__ == "__main__":
     parser.add_argument('--num_eval_episodes', type=str, default=10)
     parser.add_argument('--max_iters', type=str, default=10)
     parser.add_argument('--num_steps_per_iter', type=str, default=10)
-    parser.add_argument('--max_ep_len', type=str, default=10)
+    parser.add_argument('--max_ep_len', type=str, default=15)
 
 
     args = parser.parse_args()

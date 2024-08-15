@@ -31,7 +31,6 @@ class DataCollate:
 
 
 
-    # Not actually required.
     def _discount_cumsum(self, x, gamma) -> np.ndarray:
         '''
         Calculates the discounted cumulative sum of the rewards.
