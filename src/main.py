@@ -31,7 +31,8 @@ def make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj):
 
 
     #Making the dataset
-    data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj, device='cuda').make_data()
+    device = torch.device("cuda")
+    data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj, device=device).make_data()
     data.save_to_disk("/home/moonlab/decision_transformer/data/")
 
     feature = data['train']
@@ -46,10 +47,9 @@ def make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj):
     state_mean = np.mean(states_concatenated, axis=0)
     state_std = np.std(states_concatenated, axis=0) + 1e-6
 
-
-
     
     return state_mean, state_std, state_dim, act_dim
+
 
 
 def save_checkpoint(model, optimizer, scheduler, iteration, path):
@@ -80,6 +80,11 @@ def experiment(variant):
     max_iters = variant['max_iters']
     num_steps_per_iter = variant['num_steps_per_iter']
     max_ep_len = variant['max_ep_len']
+    num_robot = variant['num_robot']
+    T = variant['T']
+    num_traj = variant['num_traj']
+    grid_size = variant['grid_size']
+    rewardmap_path = variant['rewardmap_path']
 
 
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -87,10 +92,6 @@ def experiment(variant):
 
     rewardmap_path = "/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl"
 
-    grid_size = 30
-    num_robot = 3
-    T = 10
-    num_traj = 50
     env_targets = [500, 400]
 
     state_mean, state_std, state_dim, act_dim = make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj)
@@ -99,7 +100,7 @@ def experiment(variant):
     model = DecisionTransformer(
         state_dim=state_dim,
         act_dim=act_dim,
-        max_length=K,
+        max_context_length=K,
         max_ep_len=max_ep_len,
         hidden_size=embed_dim,
         n_layer=n_layer,
@@ -169,8 +170,6 @@ def experiment(variant):
     final_model_path = os.path.join(checkpoint_dir, "trained_model.pt")
     torch.save(model, final_model_path)
 
-    MakeAnime(max_ep_len, num_robot, env_targets, grid_size, max_ep_len).anime()
-
 
     
 
@@ -179,20 +178,25 @@ if __name__ == "__main__":
     torch.cuda.empty_cache()
     
     parser = argparse.ArgumentParser()
-    parser.add_argument('--K', type=str, default=20)
-    parser.add_argument('--batch_size', type=str, default=32)
-    parser.add_argument('--embed_dim', type=str, default=128)
-    parser.add_argument('--n_layer', type=str, default=3)
-    parser.add_argument('--n_head', type=str, default=1)
+    parser.add_argument('--K', type=int, default=20)
+    parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--embed_dim', type=int, default=128)
+    parser.add_argument('--n_layer', type=int, default=3)
+    parser.add_argument('--n_head', type=int, default=1)
     parser.add_argument('--activation_function', type=str, default='relu')
-    parser.add_argument('--dropout', type=str, default=0.1)
-    parser.add_argument('--learning_rate', type=str, default=1e-4)
-    parser.add_argument('--weight_decay', type=str, default=1e-4)
-    parser.add_argument('--warmup_steps', type=str, default=10)
-    parser.add_argument('--num_eval_episodes', type=str, default=10)
-    parser.add_argument('--max_iters', type=str, default=10)
-    parser.add_argument('--num_steps_per_iter', type=str, default=10)
-    parser.add_argument('--max_ep_len', type=str, default=15)
+    parser.add_argument('--dropout', type=int, default=0.1)
+    parser.add_argument('--learning_rate', type=int, default=1e-4)
+    parser.add_argument('--weight_decay', type=int, default=1e-4)
+    parser.add_argument('--warmup_steps', type=int, default=10)
+    parser.add_argument('--num_eval_episodes', type=int, default=10)
+    parser.add_argument('--max_iters', type=int, default=10)
+    parser.add_argument('--num_steps_per_iter', type=int, default=10)
+    parser.add_argument('--max_ep_len', type=int, default=15)
+    parser.add_argument('--num_robot', type=int, default=3)
+    parser.add_argument('--T', type=int, default=10)
+    parser.add_argument('--num_traj', type=int, default=50)
+    parser.add_argument('--grid_size', type=int, default=30)
+    parser.add_argument('--rewardmap_path', type=str, default="/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl")
 
 
     args = parser.parse_args()

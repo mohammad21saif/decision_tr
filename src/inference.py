@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import torch
 import pickle
-
-from model.decision_transformer import DecisionTransformer
+from datetime import datetime
 
 
 
@@ -93,9 +92,8 @@ class MakeAnime:
         self.actions[0] = action
         self.rewards[0] = reward
         self.timesteps[0][0] = timestep
-        # print(state, action, reward, target_return, timestep)
 
-        episode_return = reward
+        # episode_return = reward
         for i in range(1, self.max_episode_length):
             action = self.get_actions(model, state, action, reward, target_return, timestep)
             self.states[0][i] = torch.add(input=self.states[0][i-1], other=action)
@@ -122,7 +120,19 @@ class MakeAnime:
         map = torch.tensor(pickle.load(open(self.rewardmap_path, "rb"), encoding="latin1")).to(self.device)
         self.ax.imshow(map.cpu().detach().numpy(), cmap='hot', interpolation='nearest')
         anim = animation.FuncAnimation(fig=self.fig, func=self.update_frame, interval=30, frames=self.max_episode_length)
-        # plt.show()
-        anim.save(filename='/home/moonlab/decision_transformer/decision_tr/res/videos/trajectory_video.mp4', writer='ffmpeg', fps=30)
+       
+        current_time = datetime.now().strftime("%Y%m%d__%H%M%S")
+        filename = f'/home/moonlab/decision_transformer/decision_tr/res/videos/trajectory_video_{current_time}.mp4'
+        anim.save(filename=filename, writer='ffmpeg', fps=30)
 
+        return
     
+def main():
+    anim = MakeAnime(max_episode_length=100, num_robot=3, target_return=100, grid_size=30, K=20)
+    anim.anime()
+
+    print("Animation done!")
+
+
+if __name__ == "__main__":
+    main()
