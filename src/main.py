@@ -9,6 +9,7 @@ import torch
 import numpy as np
 import os
 import argparse
+import datetime
 
 
 
@@ -162,12 +163,19 @@ def experiment(variant):
     
 
     checkpoint_dir = '/home/moonlab/decision_transformer/decision_tr/saved_models'
+    save_interval = max_iters // 3  # Calculate save interval
+
     for iter in range(max_iters):
         outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
-        checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_iter_{iter+1}.pt")
-        save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
-    
-    final_model_path = os.path.join(checkpoint_dir, "trained_model.pt")
+
+        # Save checkpoint only every max_iters/3 iterations
+        if (iter + 1) % save_interval == 0:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate timestamp
+            checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_iter_{iter+1}_{timestamp}.pt")
+            save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
+
+    final_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    final_model_path = os.path.join(checkpoint_dir, f"trained_model_{final_timestamp}.pt")
     torch.save(model, final_model_path)
 
 

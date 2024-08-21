@@ -5,16 +5,18 @@ import matplotlib.animation as animation
 import torch
 import pickle
 from datetime import datetime
+import argparse
 
 
 
 class MakeAnime:
-    def __init__(self, max_episode_length, num_robot, target_return, grid_size, K) -> None:
+    def __init__(self, variant, max_episode_length, num_robot, target_return, grid_size, K) -> None:
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cpu")
 
-        self.model_path = '/home/moonlab/decision_transformer/decision_tr/saved_models/trained_model.pt'
-        self.rewardmap_path = '/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl'
+        self.model_path = variant['model_path']
+        self.rewardmap_path = variant['rewardmap_path']
 
         self.target_return = target_return
         self.num_robot = num_robot
@@ -76,32 +78,62 @@ class MakeAnime:
         
 
 
+    # def get_frames(self):
+    #     model = torch.load(self.model_path).to(self.device)
+    #     model.eval()
+    #     rewardmap = torch.tensor(pickle.load(open(self.rewardmap_path, "rb"), encoding="latin1")).to(self.device)
+
+        
+    #     state = torch.randint(low=0, high=self.grid_size, size=(self.num_robot*2,)).to(self.device)
+    #     action = torch.zeros((self.num_robot*2,)).to(self.device)
+    #     reward = rewardmap[state[0::2].to(int), state[1::2].to(int)].sum()
+    #     target_return = torch.tensor(self.target_return).to(self.device)
+    #     timestep = torch.tensor(0).reshape(1, 1).to(self.device)
+        
+    #     self.states[0] = state
+    #     self.actions[0] = action
+    #     self.rewards[0] = reward
+    #     self.timesteps[0][0] = timestep
+
+    #     # episode_return = reward
+    #     for i in range(1, self.max_episode_length):
+    #         action = self.get_actions(model, state, action, reward, target_return, timestep)
+    #         self.states[0][i] = torch.add(input=self.states[0][i-1], other=action)
+    #         self.actions[0][i] = action
+    #         self.timesteps[0][i] = i
+    #         self.rewards[0][i] = rewardmap[self.states[0][i][0::2].to(int), self.states[0][i][1::2].to(int)].sum()
+    #         # episode_return += self.rewards[i]
+    #     # print("States: ", self.states, "Actions: ", self.actions, "Rewards: ", self.rewards, "Timesteps: ", self.timesteps)
+
+    #     return
+
     def get_frames(self):
         model = torch.load(self.model_path).to(self.device)
         model.eval()
         rewardmap = torch.tensor(pickle.load(open(self.rewardmap_path, "rb"), encoding="latin1")).to(self.device)
 
-        
         state = torch.randint(low=0, high=self.grid_size, size=(self.num_robot*2,)).to(self.device)
         action = torch.zeros((self.num_robot*2,)).to(self.device)
         reward = rewardmap[state[0::2].to(int), state[1::2].to(int)].sum()
         target_return = torch.tensor(self.target_return).to(self.device)
         timestep = torch.tensor(0).reshape(1, 1).to(self.device)
-        
+
         self.states[0] = state
         self.actions[0] = action
         self.rewards[0] = reward
         self.timesteps[0][0] = timestep
 
-        # episode_return = reward
         for i in range(1, self.max_episode_length):
             action = self.get_actions(model, state, action, reward, target_return, timestep)
             self.states[0][i] = torch.add(input=self.states[0][i-1], other=action)
+
+            # Clamp the positions within the grid boundaries
+            self.states[0][i][0::2] = torch.clamp(self.states[0][i][0::2], 0, self.grid_size-1)
+            self.states[0][i][1::2] = torch.clamp(self.states[0][i][1::2], 0, self.grid_size-1)
+
             self.actions[0][i] = action
             self.timesteps[0][i] = i
             self.rewards[0][i] = rewardmap[self.states[0][i][0::2].to(int), self.states[0][i][1::2].to(int)].sum()
-            # episode_return += self.rewards[i]
-        # print("States: ", self.states, "Actions: ", self.actions, "Rewards: ", self.rewards, "Timesteps: ", self.timesteps)
 
         return
 
@@ -113,7 +145,6 @@ class MakeAnime:
         return
 
 
-                
 
     def anime(self):
         self.get_frames()
@@ -127,8 +158,16 @@ class MakeAnime:
 
         return
     
+
+
 def main():
-    anim = MakeAnime(max_episode_length=100, num_robot=3, target_return=100, grid_size=30, K=20)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_path', type=str)
+    parser.add_argument('--rewardmap_path', type=str, default="/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl")
+
+    args = parser.parse_args()
+
+    anim = MakeAnime(variant=vars(args), max_episode_length=100, num_robot=3, target_return=100, grid_size=30, K=20)
     anim.anime()
 
     print("Animation done!")
