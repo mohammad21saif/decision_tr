@@ -9,6 +9,7 @@ import argparse
 
 
 
+
 class MakeAnime:
     def __init__(self, variant, max_episode_length, num_robot, target_return, grid_size, K) -> None:
 
@@ -57,6 +58,7 @@ class MakeAnime:
             states = torch.cat(
                 [torch.zeros((states.shape[0], self.max_length-states.shape[1], self.state_dim), device=states.device), states],
                 dim=1).to(dtype=torch.float32)
+            
             actions = torch.cat(
                 [torch.zeros((actions.shape[0], self.max_length - actions.shape[1], self.act_dim),
                              device=actions.device), actions],
@@ -70,9 +72,11 @@ class MakeAnime:
             ).to(dtype=torch.long)
         else:
             attention_mask = None
-
-        _, action_preds, return_preds = model.forward(
-            states, actions, None, returns_to_go, timesteps, attention_mask=attention_mask)
+        
+        with torch.no_grad():
+            _, action_preds, return_preds = model.forward(
+                states, actions, None, returns_to_go, timesteps, attention_mask=attention_mask)
+        
 
         return action_preds[0,-1]
         
@@ -124,6 +128,7 @@ class MakeAnime:
         self.timesteps[0][0] = timestep
 
         for i in range(1, self.max_episode_length):
+            print(f"Step: {i}")
             action = self.get_actions(model, state, action, reward, target_return, timestep)
             self.states[0][i] = torch.add(input=self.states[0][i-1], other=action)
 

@@ -9,7 +9,7 @@ import torch
 import numpy as np
 import os
 import argparse
-import datetime
+from datetime import datetime
 
 
 
@@ -97,7 +97,7 @@ def experiment(variant):
     num_eval_episodes = variant['num_eval_episodes']
     max_iters = variant['max_iters']
     num_steps_per_iter = variant['num_steps_per_iter']
-    max_ep_len = variant['max_ep_len']
+    # max_ep_len = variant['max_ep_len']
     num_robot = variant['num_robot']
     T = variant['T']
     num_traj = variant['num_traj']
@@ -113,13 +113,13 @@ def experiment(variant):
     env_targets = [500, 400]
 
     state_mean, state_std, state_dim, act_dim = make_dataset(rewardmap_path, grid_size, num_robot, T, num_traj)
-    collate_data = DataCollate(batch_size=batch_size, max_len=10, max_episode_len=max_ep_len, num_traj=num_traj, device=device).make_batch()
+    collate_data = DataCollate(batch_size=batch_size, max_len=10, max_episode_len=T, num_traj=num_traj, device=device).make_batch()
 
     model = DecisionTransformer(
         state_dim=state_dim,
         act_dim=act_dim,
         max_context_length=K,
-        max_ep_len=max_ep_len,
+        max_ep_len=T,
         hidden_size=embed_dim,
         n_layer=n_layer,
         n_head=n_head,
@@ -152,7 +152,7 @@ def experiment(variant):
                         state_dim,
                         act_dim,
                         model,
-                        max_ep_len=max_ep_len,
+                        max_ep_len=T,
                         target_return=target_rew,
                         state_mean=state_mean,
                         state_std=state_std,
@@ -210,14 +210,14 @@ if __name__ == "__main__":
     parser.add_argument('--n_layer', type=int, default=3)
     parser.add_argument('--n_head', type=int, default=1)
     parser.add_argument('--activation_function', type=str, default='relu')
-    parser.add_argument('--dropout', type=int, default=0.1)
-    parser.add_argument('--learning_rate', type=int, default=1e-4)
-    parser.add_argument('--weight_decay', type=int, default=1e-4)
+    parser.add_argument('--dropout', type=float, default=0.1)
+    parser.add_argument('--learning_rate', type=float, default=1e-4)
+    parser.add_argument('--weight_decay', type=float, default=1e-4)
     parser.add_argument('--warmup_steps', type=int, default=10)
     parser.add_argument('--num_eval_episodes', type=int, default=10)
     parser.add_argument('--max_iters', type=int, default=10)
     parser.add_argument('--num_steps_per_iter', type=int, default=10)
-    parser.add_argument('--max_ep_len', type=int, default=15)
+    # parser.add_argument('--max_ep_len', type=int, default=15)
     parser.add_argument('--num_robot', type=int, default=3)
     parser.add_argument('--T', type=int, default=10)
     parser.add_argument('--num_traj', type=int, default=50)
