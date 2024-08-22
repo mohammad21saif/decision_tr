@@ -14,12 +14,11 @@ import datetime
 
 
 
-def make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj):
+def make_dataset(rewardmap_path, grid_size, num_robot, T, num_traj):
     '''
     Makes the dataset for training the model.
 
     Args:
-    - device: device to run the model on, cpu or cuda.
     - rewardmap_path: path to the rewardmap.
     - grid_size: size of the grid.
     - num_robot: number of robots.
@@ -30,9 +29,7 @@ def make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj):
     - saved_data: saved dataset.
     '''
 
-
-    #Making the dataset
-    device = torch.device("cuda")
+    device = torch.device("cpu")
     data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj, device=device).make_data()
     data.save_to_disk("/home/moonlab/decision_transformer/data/")
 
@@ -48,12 +45,24 @@ def make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj):
     state_mean = np.mean(states_concatenated, axis=0)
     state_std = np.std(states_concatenated, axis=0) + 1e-6
 
-    
     return state_mean, state_std, state_dim, act_dim
 
 
 
 def save_checkpoint(model, optimizer, scheduler, iteration, path):
+    '''
+    Saves the model, optimizer and scheduler to a checkpoint.
+
+    Args:
+    - model: model to save.
+    - optimizer: optimizer to save.
+    - scheduler: scheduler to save.
+    - iteration: iteration number.
+
+    Returns:
+    - None
+    '''
+
     checkpoint = {
         'iteration': iteration,
         'model_state_dict': model.state_dict(),
@@ -65,7 +74,15 @@ def save_checkpoint(model, optimizer, scheduler, iteration, path):
 
 
 def experiment(variant):
+    '''
+    Main function to run the experiment.
 
+    Args:
+    - variant: dictionary containing the hyperparameters.
+
+    Returns:
+    - None
+    '''
 
     K = variant['K']
     batch_size = variant['batch_size']
@@ -88,14 +105,14 @@ def experiment(variant):
     rewardmap_path = variant['rewardmap_path']
 
 
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cpu")
 
     rewardmap_path = "/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl"
 
     env_targets = [500, 400]
 
-    state_mean, state_std, state_dim, act_dim = make_dataset(device, rewardmap_path, grid_size, num_robot, T, num_traj)
+    state_mean, state_std, state_dim, act_dim = make_dataset(rewardmap_path, grid_size, num_robot, T, num_traj)
     collate_data = DataCollate(batch_size=batch_size, max_len=10, max_episode_len=max_ep_len, num_traj=num_traj, device=device).make_batch()
 
     model = DecisionTransformer(
@@ -112,6 +129,7 @@ def experiment(variant):
         resid_pdrop=dropout,
         attn_pdrop=dropout,
     )
+
     model = model.to(device=device)
     optimizer = torch.optim.AdamW(
         model.parameters(),
