@@ -85,7 +85,7 @@ class DataCollate:
             # timesteps[-1][timesteps[-1] >= self.max_episode_len] = self.max_episode_len - 1
             # rtg.append(np.array(feature['returns_to_go'][s_i:s_i+self.max_len]).reshape(1, -1, 1)) #check. Dataset already has rtg.
             rtg.append(
-                self._discount_cumsum(np.array(feature["rewards"][s_i:]), gamma=1.0)[
+                self._discount_cumsum(np.array(feature["rewards"][s_i:]), gamma=0.8)[
                     : s[-1].shape[1]   # TODO check the +1 removed here
                 ].reshape(1, -1, 1)
             )

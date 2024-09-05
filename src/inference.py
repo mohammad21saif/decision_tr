@@ -11,26 +11,27 @@ import argparse
 
 
 class MakeAnime:
-    def __init__(self, variant, max_episode_length, num_robot, target_return, grid_size, K) -> None:
+    def __init__(self, variant, max_episode_length, target_return, grid_size, K) -> None:
 
         # self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.device = torch.device("cpu")
 
         self.model_path = variant['model_path']
         self.rewardmap_path = variant['rewardmap_path']
+        self.num_robot = variant['num_robot']
 
         self.target_return = target_return
-        self.num_robot = num_robot
         self.max_episode_length = max_episode_length
         self.grid_size = grid_size
 
-        self.state_dim = 2 * num_robot
-        self.act_dim = 2 * num_robot
+        self.state_dim = 2 * self.num_robot
+        self.act_dim = 2 * self.num_robot
         self.max_length = K
 
         self.states = torch.empty((1, self.max_episode_length, self.num_robot*2), dtype=torch.float32).to(self.device)
         self.actions = torch.empty((1, self.max_episode_length, self.num_robot*2), dtype=torch.float32).to(self.device)
         self.rewards = torch.empty((1, self.max_episode_length, 1), dtype=torch.float32).to(self.device)
+        
         self.rtg = torch.empty((1, self.max_episode_length, 1), dtype=torch.float32).to(self.device)
         self.timesteps = torch.empty((1, self.max_episode_length), dtype=torch.long).to(self.device)
 
@@ -112,6 +113,20 @@ class MakeAnime:
     #     return
 
     def get_frames(self):
+        '''
+        Get the frames of the animation.
+
+        1. Load the model and rewardmap.
+        2. Initialize the state, action, reward, target_return, and timestep.
+        3. Update the states, actions, rewards, and timesteps for each timestep.
+        4. Clamp the positions within the grid boundaries.
+        5. Return the frames.
+
+
+        Returns:
+            
+        '''
+
         model = torch.load(self.model_path).to(self.device)
         model.eval()
         rewardmap = torch.tensor(pickle.load(open(self.rewardmap_path, "rb"), encoding="latin1")).to(self.device)
@@ -126,9 +141,9 @@ class MakeAnime:
         self.actions[0] = action
         self.rewards[0] = reward
         self.timesteps[0][0] = timestep
+        
 
         for i in range(1, self.max_episode_length):
-            print(f"Step: {i}")
             action = self.get_actions(model, state, action, reward, target_return, timestep)
             self.states[0][i] = torch.add(input=self.states[0][i-1], other=action)
 
@@ -139,14 +154,16 @@ class MakeAnime:
             self.actions[0][i] = action
             self.timesteps[0][i] = i
             self.rewards[0][i] = rewardmap[self.states[0][i][0::2].to(int), self.states[0][i][1::2].to(int)].sum()
-
+    
         return
+
 
 
     def update_frame(self, i):
         for j in range(self.num_robot):
-            self.ax.plot
-            self.ax.plot(self.states[0, :i, j*2].cpu().detach().detach().numpy(), self.states[0, :i, j*2+1].cpu().detach().numpy(), color=self.colors[j], marker='o', markersize=5)
+            self.ax.plot(self.states[0, :i, j*2].cpu().detach().numpy(), self.states[0, :i, j*2+1].cpu().detach().numpy(), color=self.colors[j], marker='o', markersize=5)
+            self.ax.set_xlim(0, self.grid_size)
+            self.ax.set_ylim(0, self.grid_size)
         return
 
 
@@ -154,7 +171,7 @@ class MakeAnime:
     def anime(self):
         self.get_frames()
         map = torch.tensor(pickle.load(open(self.rewardmap_path, "rb"), encoding="latin1")).to(self.device)
-        self.ax.imshow(map.cpu().detach().numpy(), cmap='hot', interpolation='nearest')
+        self.ax.imshow(map.cpu().detach().numpy(), cmap='viridis', interpolation='nearest')
         anim = animation.FuncAnimation(fig=self.fig, func=self.update_frame, interval=30, frames=self.max_episode_length)
        
         current_time = datetime.now().strftime("%Y%m%d__%H%M%S")
@@ -169,10 +186,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str)
     parser.add_argument('--rewardmap_path', type=str, default="/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl")
+    parser.add_argument('--num_robot', type=int, default=3)
 
     args = parser.parse_args()
 
-    anim = MakeAnime(variant=vars(args), max_episode_length=100, num_robot=3, target_return=100, grid_size=30, K=20)
+    anim = MakeAnime(variant=vars(args), max_episode_length=150, target_return=100, grid_size=30, K=20)
     anim.anime()
 
     print("Animation done!")

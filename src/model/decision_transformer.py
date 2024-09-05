@@ -92,7 +92,9 @@ class DecisionTransformer(TrajectoryModel):
         )
 
 
-        # we feed in the input embeddings (not word indices as in NLP) to the model
+        # we feed in the input embedding
+        # 
+        # s (not word indices as in NLP) to the model
         transformer_outputs = self.transformer(
             inputs_embeds=stacked_inputs,
             attention_mask=stacked_attention_mask,

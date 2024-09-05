@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 from training.trainer import Trainer
 
@@ -33,6 +34,8 @@ class SequenceTrainer(Trainer):
             None, action_preds, None,
             None, action_target, None,
         )
+
+
 
         self.optimizer.zero_grad()
         loss.backward()
