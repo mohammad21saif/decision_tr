@@ -12,6 +12,7 @@ import argparse
 from datetime import datetime
 import wandb
 from datasets import load_from_disk
+import tqdm
 
 
 
@@ -195,7 +196,7 @@ def experiment(variant):
             config=variant
         )
 
-    for iter in range(max_iters):
+    for iter in tqdm(range(max_iters), desc="Training", unit=iter):
         outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
         if log_to_wandb:
             wandb.log(outputs)
