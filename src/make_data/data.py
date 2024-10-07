@@ -116,6 +116,8 @@ class RandomSampler:
                 self.rewards[i][t] = self.rewardmap[self.states[i][t][0::2].to(int), self.states[i][t][1::2].to(int)].sum()
                 self.rtg[i][t] = torch.add(input=self.rtg[i][t-1], other=self.rewards[i][t])
                 self.timesteps[i][t] = t
+            self.rtg[i] = torch.flip(self.rtg[i], dims=[0])
+        
 
         return self.states, self.actions, self.rewards, self.rtg, self.timesteps
 

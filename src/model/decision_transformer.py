@@ -20,7 +20,7 @@ class DecisionTransformer(TrajectoryModel):
             act_dim,
             hidden_size,
             max_context_length=None,
-            max_ep_len=10,
+            max_ep_len=1000,
             action_tanh=True,
             **kwargs
     ):
@@ -119,6 +119,8 @@ class DecisionTransformer(TrajectoryModel):
         actions = actions.reshape(1, -1, self.act_dim)
         returns_to_go = returns_to_go.reshape(1, -1, 1)
         timesteps = timesteps.reshape(1, -1)
+
+        timesteps = torch.clamp(timesteps, max=self.embed_timestep.num_embeddings - 1)
 
         if self.max_context_length is not None:
             states = states[:,-self.max_context_length:]

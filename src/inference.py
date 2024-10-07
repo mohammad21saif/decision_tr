@@ -29,8 +29,8 @@ class MakeAnime:
         self.max_length = K
 
         self.states = torch.empty((1, self.max_episode_length, self.num_robot*2), dtype=torch.float32).to(self.device)
-        self.actions = torch.empty((1, self.max_episode_length, self.num_robot*2), dtype=torch.float32).to(self.device)
-        self.rewards = torch.empty((1, self.max_episode_length, 1), dtype=torch.float32).to(self.device)
+        self.actions = torch.zeros((1, self.max_episode_length, self.num_robot*2), dtype=torch.float32).to(self.device)
+        self.rewards = torch.zeros((1, self.max_episode_length, 1), dtype=torch.float32).to(self.device)
         
         self.rtg = torch.empty((1, self.max_episode_length, 1), dtype=torch.float32).to(self.device)
         self.timesteps = torch.empty((1, self.max_episode_length), dtype=torch.long).to(self.device)
@@ -74,9 +74,9 @@ class MakeAnime:
         else:
             attention_mask = None
         
-        with torch.no_grad():
-            _, action_preds, return_preds = model.forward(
-                states, actions, None, returns_to_go, timesteps, attention_mask=attention_mask)
+        
+        _, action_preds, return_preds = model.forward(
+            states, actions, None, returns_to_go, timesteps, attention_mask=attention_mask)
         
 
         return action_preds[0,-1]
@@ -137,11 +137,13 @@ class MakeAnime:
         target_return = torch.tensor(self.target_return).to(self.device)
         timestep = torch.tensor(0).reshape(1, 1).to(self.device)
 
-        self.states[0] = state
-        self.actions[0] = action
-        self.rewards[0] = reward
+        self.states[0][0] = state
+        self.actions[0][0] = action
+        self.rewards[0][0] = reward
         self.timesteps[0][0] = timestep
-        
+        # print("States: ", self.states, "Actions: ", self.actions, "Rewards: ", self.rewards, "Timesteps: ", self.timesteps)
+        print("States: ", self.states.shape, "Actions: ", self.actions.shape, "Rewards: ", self.rewards.shape, "Timesteps: ", self.timesteps.shape)
+
 
         for i in range(1, self.max_episode_length):
             action = self.get_actions(model, state, action, reward, target_return, timestep)
@@ -154,6 +156,7 @@ class MakeAnime:
             self.actions[0][i] = action
             self.timesteps[0][i] = i
             self.rewards[0][i] = rewardmap[self.states[0][i][0::2].to(int), self.states[0][i][1::2].to(int)].sum()
+        print("States: ", self.states.shape, "Actions: ", self.actions.shape, "Rewards: ", self.rewards.shape, "Timesteps: ", self.timesteps.shape)
     
         return
 
@@ -190,7 +193,7 @@ def main():
 
     args = parser.parse_args()
 
-    anim = MakeAnime(variant=vars(args), max_episode_length=150, target_return=100, grid_size=30, K=20)
+    anim = MakeAnime(variant=vars(args), max_episode_length=100, target_return=300, grid_size=30, K=1)
     anim.anime()
 
     print("Animation done!")

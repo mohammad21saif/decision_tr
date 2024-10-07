@@ -11,46 +11,71 @@ import os
 import argparse
 from datetime import datetime
 import wandb
-from datasets import load_from_disk
-import tqdm
+from datasets import load_from_disk, concatenate_datasets
+from progiter.manager import ProgressManager
+from scipy import stats
+import math
 
 
 
 
-def make_dataset(device):
+def make_dataset(device, num_shards, T):
     '''
     Loads dataset.
 
     Args:
-    - rewardmap_path: path to the rewardmap.
-    - grid_size: size of the grid.
-    - num_robot: number of robots.
+    - device: device to load the dataset.
+    - num_shards: number of shards to load.
     - T: number of time steps.
-    - num_traj: number of trajectories
 
     Returns:
     - state_mean: mean of the states.
     - state_std: standard deviation of the states.
     - state_dim: dimension of the state.
     - act_dim: dimension of the action.
+    - data: dataset.
     '''
 
     device = device
-    data = load_from_disk("/home/moonlab/decision_transformer/data/")
-
-    feature = data['train']
-    state_dim = len(feature['states'][0][0])
-    act_dim = len(feature['actions'][0][0])
-
+    pman = ProgressManager()
+    dataset = concatenate_datasets([
+                load_from_disk(f"/home/moonlab/decision_transformer/data/data_{shard_idx}")['train']
+                for shard_idx in range(num_shards)
+                ])
     states = []
-    for traj in feature['states']:
-        states.append(traj)
-    
-    states_concatenated = np.concatenate(states, axis=0)
-    state_mean = np.mean(states_concatenated, axis=0)
-    state_std = np.std(states_concatenated, axis=0) + 1e-6
+    means = []
+    stds = []
+    sample_size = []
+    with pman:
+        for shard_idx in pman(range(num_shards)):
+            data = load_from_disk(f"/home/moonlab/decision_transformer/data/data_{shard_idx}")['train']
+            feature = data
+            state_dim = len(feature['states'][0][0])
+            act_dim = len(feature['actions'][0][0])
+            for traj in feature['states']:
+                states.append(traj)
 
-    return state_mean, state_std, state_dim, act_dim
+            states_concatenated = np.concatenate(states, axis=0)
+            state_mean = np.mean(states_concatenated, axis=0)
+            means.append(state_mean)
+
+            state_std = np.std(states_concatenated, axis=0) + 1e-6
+            stds.append(state_std)
+
+            sample_size.append(T)
+
+        combined_means = np.mean(np.array(means), axis=0)
+        print("State mean: ", combined_means)
+        
+        total_sample_size = sum(sample_size)
+        pooled_variance = np.sum([((sample_size[i] - 1) * stds[i]**2) for i in range(num_shards)], axis=0) / (total_sample_size - num_shards)
+        combined_stds = np.sqrt(pooled_variance)
+        
+        print("State std: ", combined_stds)
+        print("State dim: ", state_dim)
+        print("Act dim: ", act_dim)
+        pass
+    return combined_means, combined_stds, state_dim, act_dim, dataset
 
 
 
@@ -108,6 +133,7 @@ def experiment(variant):
     num_traj = variant['num_traj']
     grid_size = variant['grid_size']
     rewardmap_path = variant['rewardmap_path']
+    num_shards = variant['num_shards']
 
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -116,10 +142,12 @@ def experiment(variant):
 
     rewardmap_path = "/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl"
 
-    env_targets = [500, 400]
+    env_targets = [500]
 
-    state_mean, state_std, state_dim, act_dim = make_dataset(device)
-    collate_data = DataCollate(batch_size=batch_size, max_len=10, max_episode_len=T, num_traj=num_traj, device=device).make_batch()
+    state_mean, state_std, state_dim, act_dim, data = make_dataset(device, num_shards, T)
+    print("Starting experiment")
+    collate_data = DataCollate(dataset=data, batch_size=batch_size, max_len=10, max_episode_len=T, num_traj=num_traj, device=device).make_batch()
+    print("Data collated")
 
     model = DecisionTransformer(
         state_dim=state_dim,
@@ -135,6 +163,7 @@ def experiment(variant):
         resid_pdrop=dropout,
         attn_pdrop=dropout,
     )
+    print("Model created")
 
     model = model.to(device=device)
     optimizer = torch.optim.AdamW(
@@ -196,20 +225,23 @@ def experiment(variant):
             config=variant
         )
 
-    for iter in tqdm(range(max_iters), desc="Training", unit=iter):
-        outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
-        if log_to_wandb:
-            wandb.log(outputs)
-
-        # Save checkpoint only every max_iters/3 iterations
-        if (iter + 1) % save_interval == 0:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate timestamp
-            checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_iter_{iter+1}_{timestamp}.pt")
-            save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
-
-    final_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    final_model_path = os.path.join(checkpoint_dir, f"trained_model_{final_timestamp}.pt")
-    torch.save(model, final_model_path)
+    print("Starting Iterations")
+    progress = ProgressManager()
+    with progress:
+        for iter in range(max_iters):
+            outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
+            if log_to_wandb:
+                wandb.log(outputs)
+    
+            # Save checkpoint only every max_iters/3 iterations
+            if (iter + 1) % save_interval == 0:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate timestamp
+                checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_iter_{iter+1}_{timestamp}.pt")
+                save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
+    
+        final_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        final_model_path = os.path.join(checkpoint_dir, f"trained_model_{final_timestamp}.pt")
+        torch.save(model, final_model_path)
 
 
     
@@ -240,6 +272,7 @@ if __name__ == "__main__":
     parser.add_argument('--grid_size', type=int, default=30)
     parser.add_argument('--rewardmap_path', type=str, default="/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl")
     parser.add_argument('--wandb', type=bool, default=True)
+    parser.add_argument('--num_shards', type=int, default=3)
 
     args = parser.parse_args()
 

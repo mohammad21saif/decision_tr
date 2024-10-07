@@ -4,7 +4,7 @@ import numpy as np
 
 
 class DataCollate:
-    def __init__(self, batch_size, max_len, max_episode_len, num_traj, device):
+    def __init__(self, dataset, batch_size, max_len, max_episode_len, num_traj, device):
         '''
         Initializes the DataCollate object.
 
@@ -19,15 +19,15 @@ class DataCollate:
         - None
         '''
 
-        self.dataset = load_from_disk('/home/moonlab/decision_transformer/data/')
+        self.dataset = dataset
         self.batch_size = batch_size
         self.max_len = max_len
         self.max_episode_len = max_episode_len
         self.num_traj = num_traj
         self.device = device
 
-        self.state_dim = len(self.dataset['train'][0]['states'][0])
-        self.act_dim = len(self.dataset['train'][0]['actions'][0])
+        self.state_dim = len(self.dataset[0]['states'][0])
+        self.act_dim = len(self.dataset[0]['actions'][0])
 
 
 
@@ -73,7 +73,7 @@ class DataCollate:
         s, a, r, rtg, timesteps, mask = [], [], [], [], [], []
 
         for i in batch_indices:
-            feature = self.dataset['train'][int(i)]
+            feature = self.dataset[int(i)]
             # feature = self.dataset['train']
             s_i = np.random.randint(0, len(feature['states'])-1) # randomly selecting a starting index
 
@@ -81,6 +81,7 @@ class DataCollate:
             a.append(np.array(feature['actions'][s_i:s_i+self.max_len]).reshape(1, -1, self.act_dim))
             r.append(np.array(feature['rewards'][s_i:s_i+self.max_len]).reshape(1, -1, 1))
             timesteps.append(np.array(feature['timesteps'][s_i:s_i+self.max_len]).reshape(1, -1)) #check. Dataset already has timesteps.
+            timesteps[-1] = np.minimum(timesteps[-1], self.max_episode_len - 1)
             # timesteps.append(np.arange(s_i, s_i + s[-1].shape[1]).reshape(1, -1)) 
             # timesteps[-1][timesteps[-1] >= self.max_episode_len] = self.max_episode_len - 1
             # rtg.append(np.array(feature['returns_to_go'][s_i:s_i+self.max_len]).reshape(1, -1, 1)) #check. Dataset already has rtg.
@@ -113,6 +114,7 @@ class DataCollate:
         mask = torch.from_numpy(np.concatenate(mask, axis=0)).float().to(self.device)
 
         # print("From data collator: ", "state: ", s.shape, "action: ", a.shape, r.shape, "returns: ", rtg.shape, timesteps.shape, mask.shape)
+        # print(timesteps)
 
         return {
             'states': s,

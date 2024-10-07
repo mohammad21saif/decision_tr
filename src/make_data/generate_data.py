@@ -1,6 +1,7 @@
 from data import RandomSampler
 import argparse
 import torch
+import os
 
 
 def generate(variant):
@@ -9,12 +10,17 @@ def generate(variant):
     num_robot = variant['num_robot']
     T = variant['T']
     num_traj = variant['num_traj']
+    # save_limit_factor = variant['save_limit_factor']
+    num_shards = variant['num_shards']
 
     device = torch.device("cpu")
-    
-    data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj, device=device).make_data()
-    data.save_to_disk("/home/moonlab/decision_transformer/data/")
 
+    for shard in range(0, num_shards):
+        print(f"Generating data for shard {shard}")
+        num_traj_per_shard = num_traj // num_shards
+        data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj_per_shard, device=device).make_data()
+        data.save_to_disk(f"/home/moonlab/decision_transformer/data/data_{shard}")
+    
 
 
 def main():
@@ -27,10 +33,12 @@ def main():
     parser.add_argument('--num_robot', type=int, default=3)
     parser.add_argument('--T', type=int, default=10)
     parser.add_argument('--num_traj', type=int, default=50)
+    parser.add_argument('--num_shards', type=int, default=10)
 
     args = parser.parse_args()
 
     generate(variant=vars(args))
+    # combine_data(variant=vars(args))
 
     torch.cuda.empty_cache()
 

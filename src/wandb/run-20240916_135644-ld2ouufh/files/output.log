@@ -1,0 +1,22 @@
+
+Starting Iterations
+================================================================================
+Iteration 1
+time/training: 5448.971211433411
+evaluation/target_200_return_mean: 280.0645188394745
+evaluation/target_200_return_std: 5.684341886080802e-14
+evaluation/target_200_length_mean: 200.0
+evaluation/target_200_length_std: 0.0
+evaluation/target_300_return_mean: 286.1312501180235
+evaluation/target_300_return_std: 5.684341886080802e-14
+evaluation/target_300_length_mean: 200.0
+evaluation/target_300_length_std: 0.0
+evaluation/target_400_return_mean: 287.80594526441746
+evaluation/target_400_return_std: 0.0
+evaluation/target_400_length_mean: 200.0
+evaluation/target_400_length_std: 0.0
+time/total: 5456.63254404068
+time/evaluation: 5.327868461608887
+training/train_loss_mean: 2.151735142299652
+training/train_loss_std: 0.003797219973395804
+training/action_error: 2.1515636444091797
