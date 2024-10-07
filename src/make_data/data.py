@@ -45,11 +45,11 @@ class RandomSampler:
         self.num_traj = num_traj
         
         #Initialize tensors to store
-        self.states = torch.empty((self.num_traj, self.T, self.num_robot*2), dtype=torch.float32).to(self.device)
-        self.actions = torch.empty((self.num_traj, self.T, self.num_robot*2), dtype=torch.float32).to(self.device)
-        self.rewards = torch.empty((self.num_traj, self.T, 1), dtype=torch.float32).to(self.device)
-        self.rtg = torch.empty((self.num_traj, self.T, 1), dtype=torch.float32).to(self.device)
-        self.timesteps = torch.empty((self.num_traj, self.T), dtype=torch.long).to(self.device)
+        self.states = torch.empty((self.num_traj, self.T, self.num_robot*2), dtype=torch.float32, device=self.device)
+        self.actions = torch.empty((self.num_traj, self.T, self.num_robot*2), dtype=torch.float32, device=self.device)
+        self.rewards = torch.empty((self.num_traj, self.T, 1), dtype=torch.float32, device=self.device)
+        self.rtg = torch.empty((self.num_traj, self.T, 1), dtype=torch.float32, device=self.device)
+        self.timesteps = torch.empty((self.num_traj, self.T), dtype=torch.long, device=self.device)
         # self.visited = torch.empty((self.num_traj, self.T, self.num_robot*2), dtype=torch.float32).to(self.device)
 
 
@@ -116,6 +116,8 @@ class RandomSampler:
                 self.rewards[i][t] = self.rewardmap[self.states[i][t][0::2].to(int), self.states[i][t][1::2].to(int)].sum()
                 self.rtg[i][t] = torch.add(input=self.rtg[i][t-1], other=self.rewards[i][t])
                 self.timesteps[i][t] = t
+            self.rtg[i] = torch.flip(self.rtg[i], dims=[0])
+        
 
         return self.states, self.actions, self.rewards, self.rtg, self.timesteps
 
