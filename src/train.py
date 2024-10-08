@@ -64,7 +64,6 @@ def make_dataset(device, num_shards, T):
             sample_size.append(T)
 
         combined_means = np.mean(np.array(means), axis=0)
-        print("State mean: ", combined_means)
         
         total_sample_size = sum(sample_size)
         pooled_variance = np.sum([((sample_size[i] - 1) * stds[i]**2) for i in range(num_shards)], axis=0) / (total_sample_size - num_shards)
@@ -205,7 +204,7 @@ def experiment(variant):
             }
         return fn
 
-
+    #TODO: try cross-entropy loss
     trainer = SequenceTrainer(
             model=model,
             optimizer=optimizer,

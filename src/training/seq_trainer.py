@@ -15,17 +15,18 @@ class SequenceTrainer(Trainer):
         rtg = batch['returns_to_go']
         timesteps = batch['timesteps']
         attention_mask = batch['attention_mask']
+        print("rtg shape in seq: ", rtg.shape)
 
         action_target = torch.clone(actions)
-        print("Action target before reshaping: ", action_target)
-        # state_preds, action_preds, reward_preds = self.model.forward(
-        #     states, actions, rewards, rtg[:, :-1], timesteps, attention_mask=attention_mask,
-        # )
-
+        # print("Action target before reshaping: ", action_target)
         state_preds, action_preds, reward_preds = self.model.forward(
-            states, actions, rewards, rtg, timesteps, attention_mask=attention_mask,
-        ) #using all rtgs (incluiding the last entry)
-        print("Action pred before reshaping: ", action_preds)
+            states, actions, rewards, rtg[:, :-1], timesteps, attention_mask=attention_mask,
+        )
+
+        # state_preds, action_preds, reward_preds = self.model.forward(
+        #     states, actions, rewards, rtg, timesteps, attention_mask=attention_mask,
+        # ) #using all rtgs (incluiding the last entry)
+        # print("Action pred before reshaping: ", action_preds)
         act_dim = action_preds.shape[2]
         action_preds = action_preds.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
         action_target = action_target.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
@@ -37,7 +38,7 @@ class SequenceTrainer(Trainer):
             None, action_target, None,
         )
 
-        print("Loss: ", loss)
+        # print("Loss: ", loss)
 
 
 

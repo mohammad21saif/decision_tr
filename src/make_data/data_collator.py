@@ -119,7 +119,7 @@ class DataCollate:
         rtg = torch.from_numpy(np.concatenate(rtg, axis=0)).float().to(self.device)
         mask = torch.from_numpy(np.concatenate(mask, axis=0)).float().to(self.device)
 
-        # print("From data collator: ", "state: ", s.shape, "action: ", a.shape, r.shape, "returns: ", rtg.shape, timesteps.shape, mask.shape)
+        print("From data collator: ", "state: ", s.shape, "action: ", a.shape, r.shape, "returns: ", rtg.shape, "timesteps: ", timesteps.shape, "attention mask: ", mask.shape)
         # print(timesteps)
 
         return {
