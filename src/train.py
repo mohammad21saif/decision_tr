@@ -14,7 +14,6 @@ import wandb
 from datasets import load_from_disk, concatenate_datasets
 from progiter.manager import ProgressManager
 from scipy import stats
-import math
 
 
 
@@ -39,7 +38,7 @@ def make_dataset(device, num_shards, T):
     device = device
     pman = ProgressManager()
     dataset = concatenate_datasets([
-                load_from_disk(f"/home/moonlab/decision_transformer/data/data_{shard_idx}")['train']
+                load_from_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard_idx}")['train']
                 for shard_idx in range(num_shards)
                 ])
     states = []
@@ -48,7 +47,7 @@ def make_dataset(device, num_shards, T):
     sample_size = []
     with pman:
         for shard_idx in pman(range(num_shards)):
-            data = load_from_disk(f"/home/moonlab/decision_transformer/data/data_{shard_idx}")['train']
+            data = load_from_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard_idx}")['train']
             feature = data
             state_dim = len(feature['states'][0][0])
             act_dim = len(feature['actions'][0][0])
@@ -138,7 +137,7 @@ def experiment(variant):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device = torch.device("cpu")
-    log_to_wandb = variant.get('log_to_wandb', True)
+    log_to_wandb = variant.get('log_to_wandb', False)
 
     rewardmap_path = "/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl"
 
@@ -146,7 +145,14 @@ def experiment(variant):
 
     state_mean, state_std, state_dim, act_dim, data = make_dataset(device, num_shards, T)
     print("Starting experiment")
-    collate_data = DataCollate(dataset=data, batch_size=batch_size, max_len=10, max_episode_len=T, num_traj=num_traj, device=device).make_batch()
+    collate_data = DataCollate(dataset=data, 
+                               batch_size=batch_size, 
+                               max_len=10, 
+                               max_episode_len=T, 
+                               num_traj=num_traj,
+                               state_mean=state_mean,
+                               state_std=state_std,
+                               device=device).make_batch()
     print("Data collated")
 
     model = DecisionTransformer(
@@ -262,9 +268,9 @@ if __name__ == "__main__":
     parser.add_argument('--learning_rate', type=float, default=1e-4)
     parser.add_argument('--weight_decay', type=float, default=1e-4)
     parser.add_argument('--warmup_steps', type=int, default=10)
-    parser.add_argument('--num_eval_episodes', type=int, default=10)
+    parser.add_argument('--num_eval_episodes', type=int, default=2)
     parser.add_argument('--max_iters', type=int, default=10)
-    parser.add_argument('--num_steps_per_iter', type=int, default=10)
+    parser.add_argument('--num_steps_per_iter', type=int, default=2)
     # parser.add_argument('--max_ep_len', type=int, default=15)
     parser.add_argument('--num_robot', type=int, default=3)
     parser.add_argument('--T', type=int, default=10)

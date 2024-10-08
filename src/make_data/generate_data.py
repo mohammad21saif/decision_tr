@@ -19,7 +19,7 @@ def generate(variant):
         print(f"Generating data for shard {shard}")
         num_traj_per_shard = num_traj // num_shards
         data = RandomSampler(rewardmap_path, grid_size, num_robot, T, num_traj_per_shard, device=device).make_data()
-        data.save_to_disk(f"/home/moonlab/decision_transformer/data/data_{shard}")
+        data.save_to_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard}")
     
 
 

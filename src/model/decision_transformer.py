@@ -112,6 +112,7 @@ class DecisionTransformer(TrajectoryModel):
 
         return state_preds, action_preds, return_preds
 
+
     def get_action(self, states, actions, rewards, returns_to_go, timesteps, **kwargs):
         # we don't care about the past rewards in this model
 
@@ -119,6 +120,7 @@ class DecisionTransformer(TrajectoryModel):
         actions = actions.reshape(1, -1, self.act_dim)
         returns_to_go = returns_to_go.reshape(1, -1, 1)
         timesteps = timesteps.reshape(1, -1)
+        
 
         timesteps = torch.clamp(timesteps, max=self.embed_timestep.num_embeddings - 1)
 

@@ -1,0 +1,221 @@
+{
+    "os": "Linux-6.8.0-45-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-10-08T03:17:42.884854",
+    "startedAt": "2024-10-08T03:17:42.180845",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--num_robot",
+        "1",
+        "--T",
+        "10",
+        "--num_traj",
+        "1",
+        "--num_shards",
+        "1",
+        "--max_iters",
+        "1",
+        "--num_steps_per_iter",
+        "1"
+    ],
+    "state": "running",
+    "program": "/home/moonlab/decision_transformer/decision_tr/src/train.py",
+    "codePathLocal": "train.py",
+    "codePath": "src/train.py",
+    "git": {
+        "remote": "https://github.com/mohammad21saif/decision_tr.git",
+        "commit": "35b481e478f3920b24ce47583249259fdd11e23c"
+    },
+    "email": "mohammad21@iiserb.ac.in",
+    "root": "/home/moonlab/decision_transformer/decision_tr",
+    "host": "raven",
+    "username": "moonlab",
+    "executable": "/home/moonlab/decision_transformer/.venv/bin/python3",
+    "cpu_count": 24,
+    "cpu_count_logical": 32,
+    "cpu_freq": {
+        "current": 2200.14071875,
+        "min": 800.0,
+        "max": 5087.5
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 5700.08,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 5700.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 5700.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 5700.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 5772.167,
+            "min": 800.0,
+            "max": 6000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 6000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 6000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 6000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5700.0
+        },
+        {
+            "current": 4395.454,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4408.333,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4342.682,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4379.797,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4386.184,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4397.093,
+            "min": 800.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4401.318,
+            "min": 800.0,
+            "max": 4400.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 467.8895797729492,
+            "used": 369.299373626709
+        }
+    },
+    "gpu": "NVIDIA RTX A4500",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA RTX A4500",
+            "memory_total": 21464350720
+        }
+    ],
+    "memory": {
+        "total": 62.5660514831543
+    }
+}
