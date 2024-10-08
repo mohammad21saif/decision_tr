@@ -242,11 +242,11 @@ def experiment(variant):
             if (iter + 1) % save_interval == 0:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate timestamp
                 checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_iter_{iter+1}_{timestamp}.pt")
-                save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
+                # save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
     
         final_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         final_model_path = os.path.join(checkpoint_dir, f"trained_model_{final_timestamp}.pt")
-        torch.save(model, final_model_path)
+        # torch.save(model, final_model_path)
 
 
     
