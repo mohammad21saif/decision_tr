@@ -168,7 +168,6 @@ def experiment(variant):
         resid_pdrop=dropout,
         attn_pdrop=dropout,
     )
-    print("Model created")
 
     model = model.to(device=device)
     optimizer = torch.optim.AdamW(
