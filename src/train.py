@@ -70,10 +70,6 @@ def make_dataset(device, num_shards, T):
         pooled_variance = np.sum([((sample_size[i] - 1) * stds[i]**2) for i in range(num_shards)], axis=0) / (total_sample_size - num_shards)
         combined_stds = np.sqrt(pooled_variance)
         
-        print("State std: ", combined_stds)
-        print("State dim: ", state_dim)
-        print("Act dim: ", act_dim)
-        pass
     return combined_means, combined_stds, state_dim, act_dim, dataset
 
 
@@ -243,11 +239,11 @@ def experiment(variant):
             if (iter + 1) % save_interval == 0:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Generate timestamp
                 checkpoint_path = os.path.join(checkpoint_dir, f"checkpoint_iter_{iter+1}_{timestamp}.pt")
-                save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
+                # save_checkpoint(model, optimizer, scheduler, iter+1, checkpoint_path)
     
         final_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         final_model_path = os.path.join(checkpoint_dir, f"trained_model_{final_timestamp}.pt")
-        torch.save(model, final_model_path)
+        # torch.save(model, final_model_path)
 
 
     
