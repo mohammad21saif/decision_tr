@@ -4,7 +4,7 @@ import numpy as np
 
 
 class DataCollate:
-    def __init__(self, dataset, batch_size, max_len, max_episode_len, num_traj, device):
+    def __init__(self, dataset, batch_size, max_len, max_episode_len, num_traj, state_mean, state_std, device):
         '''
         Initializes the DataCollate object.
 
@@ -12,7 +12,9 @@ class DataCollate:
         - batch_size: batch size for training the model.
         - max_len: subset of episode to consider for training.
         - max_episode_len: maximum length of an episode.
-        - num_traj: number of trajectories to sample.   
+        - num_traj: number of trajectories to sample.
+        - state_mean: mean of states.
+        - state_std: standard deviation of states.   
         - device: device to run the model on, cpu or cuda.
 
         Returns:
@@ -24,6 +26,8 @@ class DataCollate:
         self.max_len = max_len
         self.max_episode_len = max_episode_len
         self.num_traj = num_traj
+        self.state_mean = state_mean
+        self.state_std = state_std
         self.device = device
 
         self.state_dim = len(self.dataset[0]['states'][0])
@@ -71,6 +75,7 @@ class DataCollate:
 
         batch_indices = np.random.choice(a=np.arange(self.num_traj), size=self.batch_size, replace=True) # used to randomly select batch indices
         s, a, r, rtg, timesteps, mask = [], [], [], [], [], []
+        scale = 1000
 
         for i in batch_indices:
             feature = self.dataset[int(i)]
@@ -96,12 +101,13 @@ class DataCollate:
             # padding and state + reward normalization
             tlen = s[-1].shape[1]
             s[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, self.state_dim)), s[-1]], axis=1)
+            s[-1] = (s[-1] - self.state_mean) / self.state_std
             a[-1] = np.concatenate(
                 [np.ones((1, self.max_len - tlen, self.act_dim)) * -10.0, a[-1]],
                 axis=1,
             )
             r[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, 1)), r[-1]], axis=1)
-            rtg[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, 1)), rtg[-1]], axis=1)
+            rtg[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, 1)), rtg[-1]], axis=1) / 1000
             timesteps[-1] = np.concatenate([np.zeros((1, self.max_len - tlen)), timesteps[-1]], axis=1)
             # mask.append(np.concatenate([np.zeros((1, self.max_len - tlen)), np.ones((1, tlen))], axis=1))
 
