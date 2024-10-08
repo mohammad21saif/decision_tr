@@ -22,7 +22,16 @@ def take_step(action, state):
     - reward: reward for taking the action.
     '''
 
-    state_ret = np.add(state, action)
+    # state_ret = np.add(action, state)
+    # reward = rewardmap[state_ret[0::2], state_ret[1::2]].sum()
+
+    # return state_ret, reward
+    state_ret = np.add(action, state)
+    
+    # Clamp the state to ensure it stays within the grid boundaries
+    state_ret[0::2] = np.clip(state_ret[0::2], 0, grid_size - 1)
+    state_ret[1::2] = np.clip(state_ret[1::2], 0, grid_size - 1)
+    
     reward = rewardmap[state_ret[0::2], state_ret[1::2]].sum()
 
     return state_ret, reward

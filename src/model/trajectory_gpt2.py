@@ -40,6 +40,7 @@ from transformers.modeling_utils import (
     SequenceSummary,
     find_pruneable_heads_and_indices,
     prune_conv1d_layer,
+    prune_linear_layer,
 )
 from transformers.utils import logging
 from transformers.utils.model_parallel_utils import assert_device_map, get_device_map
@@ -133,11 +134,15 @@ class Attention(nn.Module):
         self.scale = scale
         self.is_cross_attention = is_cross_attention
         if self.is_cross_attention:
-            self.c_attn = Conv1D(2 * n_state, nx)
-            self.q_attn = Conv1D(n_state, nx)
+            # self.c_attn = Conv1D(2 * n_state, nx)
+            # self.q_attn = Conv1D(n_state, nx)
+            self.c_attn = nn.Linear(nx, 2 * n_state)
+            self.q_attn = nn.Linear(nx, n_state)
         else:
-            self.c_attn = Conv1D(3 * n_state, nx)
-        self.c_proj = Conv1D(n_state, nx)
+            # self.c_attn = Conv1D(3 * n_state, nx)
+            self.c_attn = nn.Linear(nx, 3 * n_state)
+        # self.c_proj = Conv1D(n_state, nx)
+        self.c_proj = nn.Linear(nx, n_state)
         self.attn_dropout = nn.Dropout(config.attn_pdrop)
         self.resid_dropout = nn.Dropout(config.resid_pdrop)
         self.pruned_heads = set()
@@ -151,8 +156,10 @@ class Attention(nn.Module):
         index_attn = torch.cat([index, index + self.split_size, index + (2 * self.split_size)])
 
         # Prune conv1d layers
-        self.c_attn = prune_conv1d_layer(self.c_attn, index_attn, dim=1)
-        self.c_proj = prune_conv1d_layer(self.c_proj, index, dim=0)
+        # self.c_attn = prune_conv1d_layer(self.c_attn, index_attn, dim=1)
+        # self.c_proj = prune_conv1d_layer(self.c_proj, index, dim=0)
+        self.c_attn = prune_linear_layer(self.c_attn, index_attn, dim=1)
+        self.c_proj = prune_linear_layer(self.c_proj, index, dim=0)
 
         # Update hyper params
         self.split_size = (self.split_size // self.n_head) * (self.n_head - len(heads))
@@ -248,8 +255,10 @@ class MLP(nn.Module):
     def __init__(self, n_state, config):  # in MLP: n_state=3072 (4 * n_embd)
         super().__init__()
         nx = config.n_embd
-        self.c_fc = Conv1D(n_state, nx)
-        self.c_proj = Conv1D(nx, n_state)
+        # self.c_fc = Conv1D(n_state, nx)
+        # self.c_proj = Conv1D(nx, n_state)
+        self.c_fc = nn.Linear(nx, n_state)
+        self.c_proj = nn.Linear(n_state, nx)
         self.act = ACT2FN[config.activation_function]
         self.dropout = nn.Dropout(config.resid_pdrop)
 
@@ -263,8 +272,10 @@ class AdapterMLP(nn.Module):
     def __init__(self, n_state, config):  # in MLP: n_state=3072 (4 * n_embd)
         super().__init__()
         nx = config.n_embd
-        self.c_fc = Conv1D(n_state, nx)
-        self.c_proj = Conv1D(nx, n_state)
+        # self.c_fc = Conv1D(n_state, nx)
+        # self.c_proj = Conv1D(nx, n_state)
+        self.c_fc = nn.Linear(nx, n_state)
+        self.c_proj = nn.Linear(n_state, nx)
         self.act = ACT2FN[config.activation_function]
         self.dropout = nn.Dropout(config.resid_pdrop)
 
@@ -584,6 +595,8 @@ class GPT2Model(GPT2PreTrainedModel):
 
     @add_start_docstrings_to_model_forward(GPT2_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
+        # tokenizer_class=_TOKENIZER_FOR_DOC,
+        processor_class=_TOKENIZER_FOR_DOC,
         checkpoint="gpt2",
         output_type=BaseModelOutputWithPastAndCrossAttentions,
         config_class=_CONFIG_FOR_DOC,

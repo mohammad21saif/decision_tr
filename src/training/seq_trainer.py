@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 from training.trainer import Trainer
 
@@ -16,7 +17,7 @@ class SequenceTrainer(Trainer):
         attention_mask = batch['attention_mask']
 
         action_target = torch.clone(actions)
-
+        print("Action target before reshaping: ", action_target)
         # state_preds, action_preds, reward_preds = self.model.forward(
         #     states, actions, rewards, rtg[:, :-1], timesteps, attention_mask=attention_mask,
         # )
@@ -24,15 +25,21 @@ class SequenceTrainer(Trainer):
         state_preds, action_preds, reward_preds = self.model.forward(
             states, actions, rewards, rtg, timesteps, attention_mask=attention_mask,
         ) #using all rtgs (incluiding the last entry)
-
+        print("Action pred before reshaping: ", action_preds)
         act_dim = action_preds.shape[2]
         action_preds = action_preds.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
         action_target = action_target.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
+        # print("Action preds after reshaping: ", action_preds)
+        # print("Action target after reshaping: ", action_target)
 
         loss = self.loss_fn(
             None, action_preds, None,
             None, action_target, None,
         )
+
+        print("Loss: ", loss)
+
+
 
         self.optimizer.zero_grad()
         loss.backward()

@@ -1,0 +1,220 @@
+2024-10-07 17:56:06,620 INFO    StreamThr :116977 [internal.py:wandb_internal():85] W&B internal server running at pid: 116977, started at: 2024-10-07 17:56:06.620088
+2024-10-07 17:56:06,621 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: status
+2024-10-07 17:56:06,623 INFO    WriterThread:116977 [datastore.py:open_for_write():87] open: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/run-vp124tpe.wandb
+2024-10-07 17:56:06,623 DEBUG   SenderThread:116977 [sender.py:send():391] send: header
+2024-10-07 17:56:06,625 DEBUG   SenderThread:116977 [sender.py:send():391] send: run
+2024-10-07 17:56:07,336 INFO    SenderThread:116977 [dir_watcher.py:__init__():211] watching files in: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files
+2024-10-07 17:56:07,336 INFO    SenderThread:116977 [sender.py:_start_run_threads():1200] run started: vp124tpe with start time 1728303966.619936
+2024-10-07 17:56:07,342 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: run_start
+2024-10-07 17:56:07,347 DEBUG   HandlerThread:116977 [system_info.py:__init__():26] System info init
+2024-10-07 17:56:07,347 DEBUG   HandlerThread:116977 [system_info.py:__init__():41] System info init done
+2024-10-07 17:56:07,347 INFO    HandlerThread:116977 [system_monitor.py:start():194] Starting system monitor
+2024-10-07 17:56:07,347 INFO    SystemMonitor:116977 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-10-07 17:56:07,347 INFO    HandlerThread:116977 [system_monitor.py:probe():214] Collecting system info
+2024-10-07 17:56:07,347 INFO    SystemMonitor:116977 [interfaces.py:start():188] Started cpu monitoring
+2024-10-07 17:56:07,348 INFO    SystemMonitor:116977 [interfaces.py:start():188] Started disk monitoring
+2024-10-07 17:56:07,349 INFO    SystemMonitor:116977 [interfaces.py:start():188] Started gpu monitoring
+2024-10-07 17:56:07,349 INFO    SystemMonitor:116977 [interfaces.py:start():188] Started memory monitoring
+2024-10-07 17:56:07,350 INFO    SystemMonitor:116977 [interfaces.py:start():188] Started network monitoring
+2024-10-07 17:56:07,359 DEBUG   HandlerThread:116977 [system_info.py:probe():152] Probing system
+2024-10-07 17:56:07,362 DEBUG   HandlerThread:116977 [system_info.py:_probe_git():137] Probing git
+2024-10-07 17:56:07,367 DEBUG   HandlerThread:116977 [system_info.py:_probe_git():145] Probing git done
+2024-10-07 17:56:07,367 DEBUG   HandlerThread:116977 [system_info.py:probe():200] Probing system done
+2024-10-07 17:56:07,367 DEBUG   HandlerThread:116977 [system_monitor.py:probe():223] {'os': 'Linux-6.8.0-45-generic-x86_64-with-glibc2.35', 'python': '3.10.12', 'heartbeatAt': '2024-10-07T12:26:07.359512', 'startedAt': '2024-10-07T12:26:06.617235', 'docker': None, 'cuda': None, 'args': ('--num_robot', '1', '--T', '10', '--num_traj', '1', '--num_shards', '1'), 'state': 'running', 'program': '/home/moonlab/decision_transformer/decision_tr/src/train.py', 'codePathLocal': 'train.py', 'codePath': 'src/train.py', 'git': {'remote': 'https://github.com/mohammad21saif/decision_tr.git', 'commit': '35b481e478f3920b24ce47583249259fdd11e23c'}, 'email': 'mohammad21@iiserb.ac.in', 'root': '/home/moonlab/decision_transformer/decision_tr', 'host': 'raven', 'username': 'moonlab', 'executable': '/home/moonlab/decision_transformer/.venv/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 2812.9919375, 'min': 800.0, 'max': 5087.5}, 'cpu_freq_per_core': [{'current': 5700.0, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 5700.0}, {'current': 5655.813, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 5700.0}, {'current': 5700.0, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 5700.0}, {'current': 5700.0, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 5700.0}, {'current': 5700.0, 'min': 800.0, 'max': 6000.0}, {'current': 800.0, 'min': 800.0, 'max': 6000.0}, {'current': 5700.0, 'min': 800.0, 'max': 6000.0}, {'current': 800.0, 'min': 800.0, 'max': 6000.0}, {'current': 5700.0, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 5700.0}, {'current': 5700.0, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 5700.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 4361.627, 'min': 800.0, 'max': 4400.0}, {'current': 4416.86, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 4425.769, 'min': 800.0, 'max': 4400.0}, {'current': 4283.163, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}, {'current': 4460.326, 'min': 800.0, 'max': 4400.0}, {'current': 4365.254, 'min': 800.0, 'max': 4400.0}, {'current': 4399.875, 'min': 800.0, 'max': 4400.0}, {'current': 800.0, 'min': 800.0, 'max': 4400.0}], 'disk': {'/': {'total': 467.8895797729492, 'used': 369.4571075439453}}, 'gpu': 'NVIDIA RTX A4500', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA RTX A4500', 'memory_total': 21464350720}], 'memory': {'total': 62.5660514831543}}
+2024-10-07 17:56:07,367 INFO    HandlerThread:116977 [system_monitor.py:probe():224] Finished collecting system info
+2024-10-07 17:56:07,367 INFO    HandlerThread:116977 [system_monitor.py:probe():227] Publishing system info
+2024-10-07 17:56:07,368 INFO    HandlerThread:116977 [system_monitor.py:probe():229] Finished publishing system info
+2024-10-07 17:56:07,369 DEBUG   SenderThread:116977 [sender.py:send():391] send: files
+2024-10-07 17:56:07,369 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-metadata.json with policy now
+2024-10-07 17:56:07,412 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: python_packages
+2024-10-07 17:56:07,413 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: python_packages
+2024-10-07 17:56:07,453 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: stop_status
+2024-10-07 17:56:07,453 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-07 17:56:07,454 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: stop_status
+2024-10-07 17:56:07,804 DEBUG   SenderThread:116977 [sender.py:send():391] send: telemetry
+2024-10-07 17:56:07,880 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:07,880 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:07,881 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:07,881 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:08,033 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:08,034 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:08,034 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:08,034 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:08,177 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:08,177 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:08,178 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:08,178 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:08,337 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:08,391 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:08,396 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:08,397 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_created():271] file/dir created: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/output.log
+2024-10-07 17:56:08,397 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_created():271] file/dir created: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/wandb-summary.json
+2024-10-07 17:56:08,408 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:08,408 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_created():271] file/dir created: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/wandb-metadata.json
+2024-10-07 17:56:08,434 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_created():271] file/dir created: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/requirements.txt
+2024-10-07 17:56:08,568 INFO    wandb-upload_0:116977 [upload_job.py:push():130] Uploaded file /tmp/tmpp4e1xhp3wandb/xdisi1ec-wandb-metadata.json
+2024-10-07 17:56:08,593 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:08,648 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:08,649 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:08,695 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:08,701 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:08,799 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:08,799 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:08,804 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:08,869 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:08,934 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:08,944 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:08,965 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:09,039 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:09,108 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:09,108 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:09,129 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:09,165 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:09,166 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:09,166 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:09,166 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:09,328 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: partial_history
+2024-10-07 17:56:09,328 DEBUG   SenderThread:116977 [sender.py:send():391] send: history
+2024-10-07 17:56:09,328 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: summary_record
+2024-10-07 17:56:09,328 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:09,334 DEBUG   SenderThread:116977 [sender.py:send():391] send: exit
+2024-10-07 17:56:09,334 INFO    SenderThread:116977 [sender.py:send_exit():598] handling exit code: 0
+2024-10-07 17:56:09,334 INFO    SenderThread:116977 [sender.py:send_exit():600] handling runtime: 1
+2024-10-07 17:56:09,334 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:09,334 INFO    SenderThread:116977 [sender.py:send_exit():606] send defer
+2024-10-07 17:56:09,335 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,335 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 0
+2024-10-07 17:56:09,335 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,335 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 0
+2024-10-07 17:56:09,335 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 1
+2024-10-07 17:56:09,335 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,335 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 1
+2024-10-07 17:56:09,335 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,335 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 1
+2024-10-07 17:56:09,335 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 2
+2024-10-07 17:56:09,335 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,335 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 2
+2024-10-07 17:56:09,335 INFO    HandlerThread:116977 [system_monitor.py:finish():203] Stopping system monitor
+2024-10-07 17:56:09,335 INFO    HandlerThread:116977 [interfaces.py:finish():200] Joined cpu monitor
+2024-10-07 17:56:09,335 DEBUG   SystemMonitor:116977 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-10-07 17:56:09,335 DEBUG   SystemMonitor:116977 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-10-07 17:56:09,335 DEBUG   SystemMonitor:116977 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-10-07 17:56:09,336 INFO    HandlerThread:116977 [interfaces.py:finish():200] Joined disk monitor
+2024-10-07 17:56:09,360 INFO    HandlerThread:116977 [interfaces.py:finish():200] Joined gpu monitor
+2024-10-07 17:56:09,361 INFO    HandlerThread:116977 [interfaces.py:finish():200] Joined memory monitor
+2024-10-07 17:56:09,361 INFO    HandlerThread:116977 [interfaces.py:finish():200] Joined network monitor
+2024-10-07 17:56:09,361 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,361 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 2
+2024-10-07 17:56:09,361 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 3
+2024-10-07 17:56:09,361 DEBUG   SenderThread:116977 [sender.py:send():391] send: stats
+2024-10-07 17:56:09,362 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,362 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 3
+2024-10-07 17:56:09,362 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,362 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 3
+2024-10-07 17:56:09,362 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 4
+2024-10-07 17:56:09,362 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,362 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 4
+2024-10-07 17:56:09,362 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,362 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 4
+2024-10-07 17:56:09,362 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 5
+2024-10-07 17:56:09,362 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,362 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 5
+2024-10-07 17:56:09,363 DEBUG   SenderThread:116977 [sender.py:send():391] send: summary
+2024-10-07 17:56:09,363 INFO    SenderThread:116977 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-10-07 17:56:09,363 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,363 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 5
+2024-10-07 17:56:09,363 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 6
+2024-10-07 17:56:09,363 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,363 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 6
+2024-10-07 17:56:09,363 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,363 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 6
+2024-10-07 17:56:09,364 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: status_report
+2024-10-07 17:56:09,381 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/wandb-summary.json
+2024-10-07 17:56:09,744 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 7
+2024-10-07 17:56:09,749 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:09,750 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 7
+2024-10-07 17:56:09,760 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:09,760 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 7
+2024-10-07 17:56:10,255 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 8
+2024-10-07 17:56:10,255 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:10,255 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 8
+2024-10-07 17:56:10,255 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:10,255 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 8
+2024-10-07 17:56:10,255 INFO    SenderThread:116977 [job_builder.py:build():443] Attempting to build job artifact
+2024-10-07 17:56:10,255 INFO    SenderThread:116977 [job_builder.py:_get_source_type():572] is repo sourced job
+2024-10-07 17:56:10,264 INFO    SenderThread:116977 [job_builder.py:build():548] adding wandb-job metadata file
+2024-10-07 17:56:10,265 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 9
+2024-10-07 17:56:10,266 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:10,266 DEBUG   SenderThread:116977 [sender.py:send():391] send: artifact
+2024-10-07 17:56:10,266 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 9
+2024-10-07 17:56:10,334 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: poll_exit
+2024-10-07 17:56:10,381 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/config.yaml
+2024-10-07 17:56:10,381 INFO    Thread-12 :116977 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/output.log
+2024-10-07 17:56:11,733 INFO    SenderThread:116977 [sender.py:send_artifact():1549] sent artifact job-https___github.com_mohammad21saif_decision_tr.git_src_train.py - {'id': 'QXJ0aWZhY3Q6MTI2NDEzMTAyMg==', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjQyMDY4NDA1NQ==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTI2NDEzMTAyMg==', 'versionIndex': 7}}}
+2024-10-07 17:56:11,733 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:11,733 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 9
+2024-10-07 17:56:11,733 INFO    SenderThread:116977 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-10-07 17:56:12,382 INFO    SenderThread:116977 [dir_watcher.py:finish():388] scan: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files
+2024-10-07 17:56:12,382 INFO    SenderThread:116977 [dir_watcher.py:finish():402] scan save: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/config.yaml config.yaml
+2024-10-07 17:56:12,382 INFO    SenderThread:116977 [dir_watcher.py:finish():402] scan save: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/wandb-metadata.json wandb-metadata.json
+2024-10-07 17:56:12,382 INFO    SenderThread:116977 [dir_watcher.py:finish():402] scan save: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/requirements.txt requirements.txt
+2024-10-07 17:56:12,382 INFO    SenderThread:116977 [dir_watcher.py:finish():402] scan save: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/wandb-summary.json wandb-summary.json
+2024-10-07 17:56:12,383 INFO    SenderThread:116977 [dir_watcher.py:finish():402] scan save: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/output.log output.log
+2024-10-07 17:56:12,383 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 10
+2024-10-07 17:56:12,383 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: poll_exit
+2024-10-07 17:56:12,385 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:12,386 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 10
+2024-10-07 17:56:12,386 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:12,387 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 10
+2024-10-07 17:56:12,387 INFO    SenderThread:116977 [file_pusher.py:finish():169] shutting down file pusher
+2024-10-07 17:56:13,065 INFO    wandb-upload_1:116977 [upload_job.py:push():130] Uploaded file /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/requirements.txt
+2024-10-07 17:56:13,136 INFO    wandb-upload_0:116977 [upload_job.py:push():130] Uploaded file /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/config.yaml
+2024-10-07 17:56:13,157 INFO    wandb-upload_2:116977 [upload_job.py:push():130] Uploaded file /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/wandb-summary.json
+2024-10-07 17:56:13,335 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: poll_exit
+2024-10-07 17:56:13,335 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: poll_exit
+2024-10-07 17:56:14,336 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: poll_exit
+2024-10-07 17:56:14,336 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: poll_exit
+2024-10-07 17:56:14,751 INFO    wandb-upload_3:116977 [upload_job.py:push():130] Uploaded file /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/files/output.log
+2024-10-07 17:56:14,951 INFO    Thread-11 (_thread_body):116977 [sender.py:transition_state():626] send defer: 11
+2024-10-07 17:56:14,951 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:14,952 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 11
+2024-10-07 17:56:14,952 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:14,952 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 11
+2024-10-07 17:56:14,952 INFO    SenderThread:116977 [file_pusher.py:join():175] waiting for file pusher
+2024-10-07 17:56:14,952 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 12
+2024-10-07 17:56:14,952 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:14,952 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 12
+2024-10-07 17:56:14,952 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:14,952 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 12
+2024-10-07 17:56:14,952 INFO    SenderThread:116977 [file_stream.py:finish():601] file stream finish called
+2024-10-07 17:56:15,252 INFO    SenderThread:116977 [file_stream.py:finish():605] file stream finish is done
+2024-10-07 17:56:15,253 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 13
+2024-10-07 17:56:15,253 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:15,253 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 13
+2024-10-07 17:56:15,253 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:15,253 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 13
+2024-10-07 17:56:15,253 INFO    SenderThread:116977 [sender.py:transition_state():626] send defer: 14
+2024-10-07 17:56:15,253 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: defer
+2024-10-07 17:56:15,253 INFO    HandlerThread:116977 [handler.py:handle_request_defer():184] handle defer: 14
+2024-10-07 17:56:15,253 DEBUG   SenderThread:116977 [sender.py:send():391] send: final
+2024-10-07 17:56:15,253 DEBUG   SenderThread:116977 [sender.py:send():391] send: footer
+2024-10-07 17:56:15,254 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: defer
+2024-10-07 17:56:15,254 INFO    SenderThread:116977 [sender.py:send_request_defer():622] handle sender defer: 14
+2024-10-07 17:56:15,254 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: poll_exit
+2024-10-07 17:56:15,254 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: server_info
+2024-10-07 17:56:15,254 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: poll_exit
+2024-10-07 17:56:15,254 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: get_summary
+2024-10-07 17:56:15,254 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: sampled_history
+2024-10-07 17:56:15,255 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: poll_exit
+2024-10-07 17:56:15,255 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: server_info
+2024-10-07 17:56:15,256 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: internal_messages
+2024-10-07 17:56:15,547 DEBUG   SenderThread:116977 [sender.py:send_request():418] send_request: poll_exit
+2024-10-07 17:56:15,548 INFO    MainThread:116977 [wandb_run.py:_footer_history_summary_info():4078] rendering history
+2024-10-07 17:56:15,548 INFO    MainThread:116977 [wandb_run.py:_footer_history_summary_info():4110] rendering summary
+2024-10-07 17:56:15,548 INFO    MainThread:116977 [wandb_run.py:_footer_sync_info():4037] logging synced files
+2024-10-07 17:56:15,548 DEBUG   HandlerThread:116977 [handler.py:handle_request():158] handle_request: shutdown
+2024-10-07 17:56:15,548 INFO    HandlerThread:116977 [handler.py:finish():884] shutting down handler
+2024-10-07 17:56:16,255 INFO    WriterThread:116977 [datastore.py:close():296] close: /home/moonlab/decision_transformer/decision_tr/src/wandb/run-20241007_175606-vp124tpe/run-vp124tpe.wandb
+2024-10-07 17:56:16,548 INFO    SenderThread:116977 [sender.py:finish():1631] shutting down sender
+2024-10-07 17:56:16,548 INFO    SenderThread:116977 [file_pusher.py:finish():169] shutting down file pusher
+2024-10-07 17:56:16,548 INFO    SenderThread:116977 [file_pusher.py:join():175] waiting for file pusher

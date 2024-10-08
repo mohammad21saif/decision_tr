@@ -1,0 +1,78 @@
+Starting Iterations
+================================================================================
+Iteration 1
+time/training: 0.5552952289581299
+evaluation/target_500_return_mean: 2.1366956659280776
+evaluation/target_500_return_std: 0.0
+evaluation/target_500_length_mean: 10.0
+evaluation/target_500_length_std: 0.0
+evaluation/target_400_return_mean: 2.1366956659280776
+evaluation/target_400_return_std: 0.0
+evaluation/target_400_length_mean: 10.0
+evaluation/target_400_length_std: 0.0
+time/total: 2.69045352935791
+time/evaluation: 0.19742941856384277
+training/train_loss_mean: 0.6982031524181366
+training/train_loss_std: 0.015191656515773361
+training/action_error: 0.6929551959037781
+================================================================================
+Iteration 2
+time/training: 0.029133081436157227
+evaluation/target_500_return_mean: 1.5435409690848165
+evaluation/target_500_return_std: 0.0
+evaluation/target_500_length_mean: 10.0
+evaluation/target_500_length_std: 0.0
+evaluation/target_400_return_mean: 1.5435409690848165
+evaluation/target_400_return_std: 0.0
+evaluation/target_400_length_mean: 10.0
+evaluation/target_400_length_std: 0.0
+time/total: 2.9163095951080322
+time/evaluation: 0.1932966709136963
+training/train_loss_mean: 0.672588300704956
+training/train_loss_std: 0.019157350814630266
+training/action_error: 0.6480931639671326
+================================================================================
+Iteration 3
+time/training: 0.032058000564575195
+evaluation/target_500_return_mean: 1.43942166016978
+evaluation/target_500_return_std: 0.0
+evaluation/target_500_length_mean: 10.0
+evaluation/target_500_length_std: 0.0
+evaluation/target_400_return_mean: 1.43942166016978
+evaluation/target_400_return_std: 0.0
+evaluation/target_400_length_mean: 10.0
+evaluation/target_400_length_std: 0.0
+time/total: 3.19169545173645
+time/evaluation: 0.23980093002319336
+training/train_loss_mean: 0.6579215824604034
+training/train_loss_std: 0.008099405617497148
+training/action_error: 0.6632199883460999
+================================================================================
+Iteration 4
+time/training: 0.027597665786743164
+evaluation/target_500_return_mean: 1.7517795869148896
+evaluation/target_500_return_std: 0.0
+evaluation/target_500_length_mean: 10.0
+evaluation/target_500_length_std: 0.0
+evaluation/target_400_return_mean: 1.7517795869148896
+evaluation/target_400_return_std: 0.0
+evaluation/target_400_length_mean: 10.0
+evaluation/target_400_length_std: 0.0
+time/total: 3.6673455238342285
+time/evaluation: 0.43642568588256836
+training/train_loss_mean: 0.648169881105423
+training/train_loss_std: 0.00854064774613344
+training/action_error: 0.6485140919685364
+[?25h
+Traceback (most recent call last):
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 279, in <module>
+    experiment(variant=vars(args))
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 232, in experiment
+    outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
+  File "/home/moonlab/decision_transformer/decision_tr/src/training/trainer.py", line 41, in train_iteration
+    outputs = eval_fn(self.model)
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 186, in fn
+    ret, length = evaluate_episode_rtg(
+  File "/home/moonlab/decision_transformer/decision_tr/src/evaluation/evaluate_episodes.py", line 157, in evaluate_episode_rtg
+    target_return = torch.cat(
+KeyboardInterrupt
