@@ -38,7 +38,7 @@ def make_dataset(device, num_shards, T):
     device = device
     pman = ProgressManager()
     dataset = concatenate_datasets([
-                load_from_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard_idx}")['train']
+                load_from_disk(f"/home/moonlab/decision_transformer/data/data_{shard_idx}")['train']
                 for shard_idx in range(num_shards)
                 ])
     states = []
@@ -47,7 +47,7 @@ def make_dataset(device, num_shards, T):
     sample_size = []
     with pman:
         for shard_idx in pman(range(num_shards)):
-            data = load_from_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard_idx}")['train']
+            data = load_from_disk(f"/home/moonlab/decision_transformer/data/data_{shard_idx}")['train']
             feature = data
             state_dim = len(feature['states'][0][0])
             act_dim = len(feature['actions'][0][0])
@@ -73,7 +73,6 @@ def make_dataset(device, num_shards, T):
         print("State std: ", combined_stds)
         print("State dim: ", state_dim)
         print("Act dim: ", act_dim)
-        pass
     return combined_means, combined_stds, state_dim, act_dim, dataset
 
 
