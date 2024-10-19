@@ -91,10 +91,12 @@ class DataCollate:
             # timesteps[-1][timesteps[-1] >= self.max_episode_len] = self.max_episode_len - 1
             # rtg.append(np.array(feature['returns_to_go'][s_i:s_i+self.max_len]).reshape(1, -1, 1)) #check. Dataset already has rtg.
             rtg.append(
-                self._discount_cumsum(np.array(feature["rewards"][s_i:]), gamma=0.8)[
+                self._discount_cumsum(np.array(feature["rewards"][s_i:]), gamma=1)[
                     : s[-1].shape[1]   # TODO check the +1 removed here
                 ].reshape(1, -1, 1)
             )
+            if rtg[-1].shape[1] <= s[-1].shape[1]:
+                rtg[-1] = np.concatenate([rtg[-1], np.zeros((1, 1, 1))], axis=1)
             # mask.append(np.concatenate([np.zeros((1, self.max_len - s[-1].shape[1])), np.ones((1, s[-1].shape[1]))], axis=1)) #0 for padding and 1 for actual data
             mask.append(np.ones((1, self.max_len)))
 
@@ -110,6 +112,7 @@ class DataCollate:
             rtg[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, 1)), rtg[-1]], axis=1) / 1000
             timesteps[-1] = np.concatenate([np.zeros((1, self.max_len - tlen)), timesteps[-1]], axis=1)
             # mask.append(np.concatenate([np.zeros((1, self.max_len - tlen)), np.ones((1, tlen))], axis=1))
+        print("rtg shape 1: ", len(rtg))
 
 
         s = torch.from_numpy(np.concatenate(s, axis=0)).float().to(self.device)
@@ -119,7 +122,7 @@ class DataCollate:
         rtg = torch.from_numpy(np.concatenate(rtg, axis=0)).float().to(self.device)
         mask = torch.from_numpy(np.concatenate(mask, axis=0)).float().to(self.device)
 
-        print("From data collator: ", "state: ", s.shape, "action: ", a.shape, r.shape, "returns: ", rtg.shape, "timesteps: ", timesteps.shape, "attention mask: ", mask.shape)
+        print("rtg shape 2: ", rtg.shape)
         # print(timesteps)
 
         return {

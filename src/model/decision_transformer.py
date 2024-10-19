@@ -66,7 +66,7 @@ class DecisionTransformer(TrajectoryModel):
         action_embeddings = self.embed_action(actions)
         returns_embeddings = self.embed_return(returns_to_go)
         time_embeddings = self.embed_timestep(timesteps)
-        print("Return shape: ", returns_embeddings.shape)
+        # print("Return shape: ", returns_embeddings.shape)
         
 
         # time embeddings are treated similar to positional embeddings
@@ -85,13 +85,13 @@ class DecisionTransformer(TrajectoryModel):
         
 
         # to make the attention mask fit the stacked inputs, have to stack it as well
-        # stacked_attention_mask = torch.stack(
-        #     (attention_mask, attention_mask, attention_mask), dim=1
-        # ).permute(0, 2, 1).reshape(batch_size, 3*seq_length)
-        # print("Attention mask: ", attention_mask.shape) 
         stacked_attention_mask = torch.stack(
             (attention_mask, attention_mask, attention_mask), dim=1
-        )
+        ).permute(0, 2, 1).reshape(batch_size, 3*seq_length)
+
+        # stacked_attention_mask = torch.stack(
+        #     (attention_mask, attention_mask, attention_mask), dim=1
+        # )
 
 
         # we feed in the input embedding

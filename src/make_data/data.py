@@ -68,7 +68,7 @@ class RandomSampler:
         '''
 
         while True:
-            valid_direc = torch.tensor([[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]], 
+            valid_direc = torch.tensor([[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]], 
                                        dtype=torch.float32).to(self.device)
             indices = torch.randperm(valid_direc.size(0))[:num_robot] # randomly selecting a direction
             selected_direc = valid_direc[indices]
