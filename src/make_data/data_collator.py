@@ -97,8 +97,7 @@ class DataCollate:
             )
             if rtg[-1].shape[1] <= s[-1].shape[1]:
                 rtg[-1] = np.concatenate([rtg[-1], np.zeros((1, 1, 1))], axis=1)
-            # mask.append(np.concatenate([np.zeros((1, self.max_len - s[-1].shape[1])), np.ones((1, s[-1].shape[1]))], axis=1)) #0 for padding and 1 for actual data
-            mask.append(np.ones((1, self.max_len)))
+            
 
             # padding and state + reward normalization
             tlen = s[-1].shape[1]
@@ -111,8 +110,8 @@ class DataCollate:
             r[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, 1)), r[-1]], axis=1)
             rtg[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, 1)), rtg[-1]], axis=1) / 1000
             timesteps[-1] = np.concatenate([np.zeros((1, self.max_len - tlen)), timesteps[-1]], axis=1)
-            # mask.append(np.concatenate([np.zeros((1, self.max_len - tlen)), np.ones((1, tlen))], axis=1))
-        print("rtg shape 1: ", len(rtg))
+            mask.append(np.concatenate([np.zeros((1, self.max_len - tlen)), np.ones((1, tlen))], axis=1))
+            # mask.append(np.ones((1, self.max_len)))
 
 
         s = torch.from_numpy(np.concatenate(s, axis=0)).float().to(self.device)
@@ -122,8 +121,8 @@ class DataCollate:
         rtg = torch.from_numpy(np.concatenate(rtg, axis=0)).float().to(self.device)
         mask = torch.from_numpy(np.concatenate(mask, axis=0)).float().to(self.device)
 
-        print("rtg shape 2: ", rtg.shape)
-        # print(timesteps)
+        print("Attention Mask: ", mask)
+
 
         return {
             'states': s,

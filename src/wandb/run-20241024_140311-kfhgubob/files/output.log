@@ -1,0 +1,54 @@
+Starting Iterations
+odict_keys(['last_hidden_state', 'past_key_values'])
+Past Key Values:  3
+Action Predicted:  tensor([[[ 0.3798, -0.5885],
+         [ 0.3374, -0.3717],
+         [ 0.3103, -0.6109],
+         [ 0.5521, -0.5626],
+         [ 0.6122, -0.6083],
+         [ 0.3470, -0.2991],
+         [ 0.2692, -0.1192],
+         [ 0.4604, -0.6977],
+         [ 0.3039,  0.2635],
+         [ 0.2810,  0.3700]]], device='cuda:0', grad_fn=<TanhBackward0>)
+Action Targets:  tensor([[[-10., -10.],
+         [-10., -10.],
+         [-10., -10.],
+         [-10., -10.],
+         [-10., -10.],
+         [-10., -10.],
+         [-10., -10.],
+         [-10., -10.],
+         [ -1.,   1.],
+         [  1.,   1.]]], device='cuda:0')
+odict_keys(['last_hidden_state', 'past_key_values'])
+Past Key Values:  3
+[?25h
+Traceback (most recent call last):
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 283, in <module>
+    experiment(variant=vars(args))
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 235, in experiment
+    outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
+  File "/home/moonlab/decision_transformer/decision_tr/src/training/trainer.py", line 41, in train_iteration
+    outputs = eval_fn(self.model)
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 189, in fn
+    ret, length = evaluate_episode_rtg(
+  File "/home/moonlab/decision_transformer/decision_tr/src/evaluation/evaluate_episodes.py", line 135, in evaluate_episode_rtg
+    action = model.get_action(
+  File "/home/moonlab/decision_transformer/decision_tr/src/model/decision_transformer.py", line 159, in get_action
+    _, action_preds, return_preds, attentions = self.forward(
+ValueError: not enough values to unpack (expected 4, got 3)
+Traceback (most recent call last):
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 283, in <module>
+    experiment(variant=vars(args))
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 235, in experiment
+    outputs = trainer.train_iteration(num_steps=num_steps_per_iter, iter_num=iter+1, print_logs=True)
+  File "/home/moonlab/decision_transformer/decision_tr/src/training/trainer.py", line 41, in train_iteration
+    outputs = eval_fn(self.model)
+  File "/home/moonlab/decision_transformer/decision_tr/src/train.py", line 189, in fn
+    ret, length = evaluate_episode_rtg(
+  File "/home/moonlab/decision_transformer/decision_tr/src/evaluation/evaluate_episodes.py", line 135, in evaluate_episode_rtg
+    action = model.get_action(
+  File "/home/moonlab/decision_transformer/decision_tr/src/model/decision_transformer.py", line 159, in get_action
+    _, action_preds, return_preds, attentions = self.forward(
+ValueError: not enough values to unpack (expected 4, got 3)

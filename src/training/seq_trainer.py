@@ -29,8 +29,7 @@ class SequenceTrainer(Trainer):
         act_dim = action_preds.shape[2]
         action_preds = action_preds.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
         action_target = action_target.reshape(-1, act_dim)[attention_mask.reshape(-1) > 0]
-        print("Action preds after reshaping: ", action_preds.shape)
-        print("Action target after reshaping: ", action_target.shape)
+
 
         loss = self.loss_fn(
             None, action_preds, None,

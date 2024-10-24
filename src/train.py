@@ -18,7 +18,7 @@ from scipy import stats
 
 
 
-def make_dataset(device, num_shards, T):
+def make_dataset(device, num_shards, T, data_path):
     '''
     Loads dataset.
 
@@ -26,6 +26,7 @@ def make_dataset(device, num_shards, T):
     - device: device to load the dataset.
     - num_shards: number of shards to load.
     - T: number of time steps.
+    - data_path: path of dataset folder.
 
     Returns:
     - state_mean: mean of the states.
@@ -38,7 +39,7 @@ def make_dataset(device, num_shards, T):
     device = device
     pman = ProgressManager()
     dataset = concatenate_datasets([
-                load_from_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard_idx}")['train']
+                load_from_disk(f"{data_path}/test_data_{shard_idx}")['train']
                 for shard_idx in range(num_shards)
                 ])
     states = []
@@ -47,7 +48,7 @@ def make_dataset(device, num_shards, T):
     sample_size = []
     with pman:
         for shard_idx in pman(range(num_shards)):
-            data = load_from_disk(f"/home/moonlab/decision_transformer/data/test_data_{shard_idx}")['train']
+            data = load_from_disk(f"{data_path}/test_data_{shard_idx}")['train']
             feature = data
             state_dim = len(feature['states'][0][0])
             act_dim = len(feature['actions'][0][0])
@@ -127,6 +128,7 @@ def experiment(variant):
     num_traj = variant['num_traj']
     grid_size = variant['grid_size']
     rewardmap_path = variant['rewardmap_path']
+    data_path = variant['data_path']
     num_shards = variant['num_shards']
 
 
@@ -138,7 +140,7 @@ def experiment(variant):
 
     env_targets = [500]
 
-    state_mean, state_std, state_dim, act_dim, data = make_dataset(device, num_shards, T)
+    state_mean, state_std, state_dim, act_dim, data = make_dataset(device, num_shards, T, data_path)
     print("Starting experiment")
     collate_data = DataCollate(dataset=data, 
                                batch_size=batch_size, 
@@ -263,7 +265,7 @@ if __name__ == "__main__":
     parser.add_argument('--learning_rate', type=float, default=1e-4)
     parser.add_argument('--weight_decay', type=float, default=1e-4)
     parser.add_argument('--warmup_steps', type=int, default=10)
-    parser.add_argument('--num_eval_episodes', type=int, default=2)
+    parser.add_argument('--num_eval_episodes', type=int, default=10)
     parser.add_argument('--max_iters', type=int, default=10)
     parser.add_argument('--num_steps_per_iter', type=int, default=2)
     # parser.add_argument('--max_ep_len', type=int, default=15)
@@ -272,6 +274,7 @@ if __name__ == "__main__":
     parser.add_argument('--num_traj', type=int, default=50)
     parser.add_argument('--grid_size', type=int, default=30)
     parser.add_argument('--rewardmap_path', type=str, default="/home/moonlab/decision_transformer/decision_tr/maps/gaussian_mixture_training_data.pkl")
+    parser.add_argument('--data_path', type=str, default='/home/moonlab/decision_transformer/data')
     parser.add_argument('--wandb', type=bool, default=True)
     parser.add_argument('--num_shards', type=int, default=3)
 

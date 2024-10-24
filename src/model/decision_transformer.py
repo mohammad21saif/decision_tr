@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
+from bertviz import model_view
 
 import transformers
 
@@ -101,6 +102,7 @@ class DecisionTransformer(TrajectoryModel):
             inputs_embeds=stacked_inputs,
             attention_mask=stacked_attention_mask,
         )
+        print(transformer_outputs.keys())
         x = transformer_outputs['last_hidden_state']
 
         # reshape x so that the second dimension corresponds to the original
@@ -154,5 +156,6 @@ class DecisionTransformer(TrajectoryModel):
 
         _, action_preds, return_preds = self.forward(
             states, actions, None, returns_to_go, timesteps, attention_mask=attention_mask, **kwargs)
+        
 
         return action_preds[0,-1]
