@@ -1,5 +1,4 @@
 import torch
-from datasets import load_from_disk
 import numpy as np
 
 
@@ -73,14 +72,12 @@ class DataCollate:
         }
         '''
 
-        batch_indices = np.random.choice(a=np.arange(self.num_traj), size=self.batch_size, replace=True) # used to randomly select batch indices
+        batch_indices = np.random.choice(a=np.arange(len(self.dataset)), size=self.batch_size, replace=True) # used to randomly select batch indices
         s, a, r, rtg, timesteps, mask = [], [], [], [], [], []
         scale = 1000
-
         for i in batch_indices:
             feature = self.dataset[int(i)]
-            # feature = self.dataset['train']
-            s_i = np.random.randint(0, len(feature['states'])-1) # randomly selecting a starting index
+            s_i = np.random.randint(0, len(feature['states']) - 1) # randomly selecting a starting index
 
             s.append(np.array(feature['states'][s_i:s_i+self.max_len]).reshape(1, -1, self.state_dim))
             a.append(np.array(feature['actions'][s_i:s_i+self.max_len]).reshape(1, -1, self.act_dim))
@@ -97,12 +94,11 @@ class DataCollate:
             )
             if rtg[-1].shape[1] <= s[-1].shape[1]:
                 rtg[-1] = np.concatenate([rtg[-1], np.zeros((1, 1, 1))], axis=1)
-            
 
             # padding and state + reward normalization
             tlen = s[-1].shape[1]
             s[-1] = np.concatenate([np.zeros((1, self.max_len - tlen, self.state_dim)), s[-1]], axis=1)
-            s[-1] = (s[-1] - self.state_mean) / self.state_std
+            # s[-1] = (s[-1] - self.state_mean) / self.state_std
             a[-1] = np.concatenate(
                 [np.ones((1, self.max_len - tlen, self.act_dim)) * -10.0, a[-1]],
                 axis=1,
@@ -113,15 +109,14 @@ class DataCollate:
             mask.append(np.concatenate([np.zeros((1, self.max_len - tlen)), np.ones((1, tlen))], axis=1))
             # mask.append(np.ones((1, self.max_len)))
 
-
         s = torch.from_numpy(np.concatenate(s, axis=0)).float().to(self.device)
         a = torch.from_numpy(np.concatenate(a, axis=0)).float().to(self.device)
         r = torch.from_numpy(np.concatenate(r, axis=0)).float().to(self.device)
         timesteps = torch.from_numpy(np.concatenate(timesteps, axis=0)).long().to(self.device)
         rtg = torch.from_numpy(np.concatenate(rtg, axis=0)).float().to(self.device)
-        mask = torch.from_numpy(np.concatenate(mask, axis=0)).float().to(self.device)
+        mask = mask.append(np.ones((1, self.max_len)))
+        # mask = torch.from_numpy(np.concatenate(mask, axis=0)).float().to(self.device)
 
-        print("Attention Mask: ", mask)
 
 
         return {
